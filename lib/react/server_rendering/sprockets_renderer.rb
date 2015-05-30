@@ -24,6 +24,9 @@ module React
           else
             "renderToString"
           end
+          
+        puts '////////////////'
+        puts js_code
 
         if !props.is_a?(String)
           props = props.to_json
