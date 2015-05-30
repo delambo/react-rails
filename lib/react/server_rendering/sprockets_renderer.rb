@@ -25,12 +25,6 @@ module React
         if !props.is_a?(String)
           props = props.to_json
         end
-        
-        js_code = <<-JS
-            var result = React.#{react_render_method}(React.createElement(#{component_name}, #{props}));
-            #{@replay_console ? CONSOLE_REPLAY : ""}
-            return result;
-        JS
 
         # js_code = <<-JS
         #           (function () {
@@ -39,8 +33,15 @@ module React
         #             return result;
         #           })()
         #         JS
+        
+        js_code = <<-JS
+            var result = React.#{react_render_method}(React.createElement(#{component_name}, #{props}));
+            #{@replay_console ? CONSOLE_REPLAY : ""}
+            return result;
+        JS
 
-        @context.eval(js_code).html_safe
+        # @context.eval(js_code).html_safe
+        @context.exec(js_code).html_safe
       rescue ExecJS::ProgramError => err
         raise PrerenderError.new(component_name, props, err)
       end
