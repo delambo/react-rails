@@ -26,7 +26,8 @@ module React
           end
           
         puts '////////////////'
-        puts js_code
+        puts @context.to_s
+        puts ' '
 
         if !props.is_a?(String)
           props = props.to_json
