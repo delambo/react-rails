@@ -10,9 +10,6 @@ module React
         filenames.each do |filename|
           js_code << ::Rails.application.assets[filename].to_s
         end
-        
-        puts '////////////////'
-        puts js_code
 
         @context = ExecJS.compile(js_code)
       end
@@ -24,22 +21,24 @@ module React
           else
             "renderToString"
           end
-          
-        puts '////////////////'
-        puts @context.to_s
-        puts ' '
 
         if !props.is_a?(String)
           props = props.to_json
         end
-
+        
         js_code = <<-JS
-          (function () {
             var result = React.#{react_render_method}(React.createElement(#{component_name}, #{props}));
             #{@replay_console ? CONSOLE_REPLAY : ""}
             return result;
-          })()
         JS
+
+        # js_code = <<-JS
+        #           (function () {
+        #             var result = React.#{react_render_method}(React.createElement(#{component_name}, #{props}));
+        #             #{@replay_console ? CONSOLE_REPLAY : ""}
+        #             return result;
+        #           })()
+        #         JS
 
         @context.eval(js_code).html_safe
       rescue ExecJS::ProgramError => err
