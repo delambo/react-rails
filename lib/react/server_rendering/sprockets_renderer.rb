@@ -10,6 +10,9 @@ module React
         filenames.each do |filename|
           js_code << ::Rails.application.assets[filename].to_s
         end
+        
+        puts '////////////////'
+        puts js_code
 
         @context = ExecJS.compile(js_code)
       end
